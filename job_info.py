@@ -1,10 +1,6 @@
-#
-# quick attempt at colorizing job information from Slurm
-# aspirations of making useful, console-based admin tools
-#
-
 import subprocess
-import sys
+
+
 
 class tcolors:
     HEADER = '\033[95m'
@@ -17,12 +13,18 @@ class tcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+
+import sys
+
 def print_progress_bar(index, total, label=''):
     n_bar = 10  # Progress bar width
     progress = index / total
     sys.stdout.write(f"[{'=' * int(n_bar * progress):{n_bar}s}] {int(100 * progress)}%  {label}")
     sys.stdout.flush()
-    
+
+
+
+
 q_partition = 'batch'
 slurm_cmd = 'sinfo --Format=All ' + ' --partition=' + q_partition
 print("slurm_cmd = ", slurm_cmd)
@@ -65,7 +67,7 @@ for r in rows:
   if node[headers['STATE']] == 'mixed':
     hostname_string += tcolors.OKCYAN
 
-  hostname_string += node[headers['HOSTNAMES']] + ' ' + node[headers['STATE']] + tcolors.ENDC
+  hostname_string += node[headers['HOSTNAMES']] + '\t' + node[headers['STATE']].ljust(10) + tcolors.ENDC
 
-  print( hostname_string, node[headers['CPUS(A/I/O/T)']], node[headers['CPU_LOAD']], node[headers['FREE_MEM']] )
+  print( hostname_string, node[headers['CPUS(A/I/O/T)']]+'\t', node[headers['CPU_LOAD']]+'\t', node[headers['FREE_MEM']] )
 
